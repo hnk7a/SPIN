@@ -1,4 +1,4 @@
-function [TestData] = LoadTest(filename, sheet, radius, vs, skip, CSM)
+function [TestData] = LoadTest(filename, sheet, radius, vs, skip, CSM, nui, Ei)
 
 [num, txt] = xlsread(filename, sheet);
 
@@ -8,8 +8,12 @@ TestData.StiffnessSegmentStart = NaN;
 TestData.LoadSegmentEnd = NaN;
 TestData.Data = NaN;
 TestData.IndenterRadius = radius;
-TestData.nui = 0.07; % Poisson's ratio of indenter, 0.07 for diamond
-TestData.Ei = 1140; % Young's modulus of indenter, 1140 GPa for diamond
+TestData.nui = nui; % Poisson's ratio of indenter, 0.07 for diamond
+TestData.Ei = Ei; % Young's modulus of indenter, 1140 GPa for diamond
+% TestData.nui = 0.07; % Poisson's ratio of indenter, 0.07 for diamond
+% TestData.Ei = 1140; % Young's modulus of indenter, 1140 GPa for diamond
+% TestData.nui = 0.03; % Poisson's ratio of indenter, 0.07 for diamond
+% TestData.Ei = 345; % Young's modulus for sapphire 7 mm indenter
 TestData.nus = vs;
 TestData.skip = skip;
 
@@ -39,13 +43,16 @@ if CSM == 1; % apply CSM corrections
     m = 1.5;
     S2 = 1/sqrt(2*pi).*P./T(:,5).*(1/K)^(1/m) .* (1 - (1 - 2*sqrt(2).*T(:,5).*S1./P).^(1/m));
     
-    % find the last imaginary data point for S2.
-    im = imag(S2);
-    imd = find(im~=0,1,'last');
-    if isempty(imd) == 1
-        imd = 0;
-    end
-    TestData.StiffnessSegmentStart = imd +1;
+%     % find the last imaginary data point for S2.
+%     im = imag(S2);
+%     imd = find(im~=0,1,'last');
+%     if isempty(imd) == 1
+%         imd = 0;
+%     end
+%     TestData.StiffnessSegmentStart = imd +1;
+
+   
+    TestData.StiffnessSegmentStart = 256 +1;
     
     T(1:end, 7:9) = [h, P, S2];
 end

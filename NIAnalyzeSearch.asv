@@ -108,11 +108,11 @@ function [analysis, success] = NIAnalyzeSearch(TestData, segment_start, segment_
     Fit2.slope = p(1);
     Fit2.y_intercept = p(2);
     
-    h_star = h_star+(p(1)*p(2));%
+    h_star = h_star+p(1)p(2);%
     
     % Evaluate Fit assuming y_intercept is zero. Fit2 parameters then emphasize data
     % which is linear and goes through the origin.
-    Output = polyval([p(1) p(2)], P_new_23);
+    Output = polyval([p(1) 0], P_new_23);
     [R22, ~, ~, AAR2, MAR2] = rsquare(h_new_fit, Output);
     
     Fit2.Rsquared = R22;

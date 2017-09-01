@@ -23,8 +23,9 @@ function StressStrainResults = CalcStressStrainWithYield(TestData, SR, Plastic)
     P = TestData.Data(:,8); % Load (mN)
     S = TestData.Data(:,9); % Harmonic Stiffness (mN/nm)
     % note these may or may not be harmonic corrected depending on CSM variable, see LoadTest.m
+% SR.Fit2.y_intercept
 
-    h_star = SR.h_star;
+    h_star = SR.h_star;%+SR.Fit2.y_intercept; %%%%%%%%%%%%%
     P_star = SR.P_star;
     
     h_new = h-h_star;  % total Displacement (nm)
@@ -48,7 +49,7 @@ function StressStrainResults = CalcStressStrainWithYield(TestData, SR, Plastic)
     Ei = TestData.Ei;  % indenter Young's modulus
     
     hi = 3/4*(1-vi^2)/Ei*P_new./a.*10^6; % elastic displacement of the indenter tip (nm)
-    
+%     hi = 0;
     h_sample = h_new - hi;                      % sample displacement corrected for the elastic displacement of the indenter tip
     StressStrainResults.h_sample = h_sample;    % used for calculation of indentation strain
     
